@@ -6,6 +6,8 @@
 
 @inject IPostsService PostService
 
+@attribute [Authorize]
+
 @if (posts == null)
 {
     <div class="spinner-border" role="status">
