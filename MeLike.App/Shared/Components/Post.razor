@@ -1,0 +1,22 @@
+﻿@using MeLike.Services.ViewModels
+
+<div>
+    <h1>Post</h1>
+    <hr />
+    <h3>@Source.Author</h3>
+    <p>@Source.Text</p>
+    <hr />
+    <div>
+        <button class="btn btn-light">
+            <i class="fas fa-thumbs-up"></i>
+            Like
+        </button>
+        <button class="btn btn-light">
+            <i class="far fa-comment-alt"></i>
+            Comment
+        </button>
+    </div>
+</div>
+@code {
+    [Parameter] public PostViewModel Source { get; set; }
+}
