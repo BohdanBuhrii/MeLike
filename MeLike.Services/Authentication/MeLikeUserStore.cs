@@ -20,7 +20,7 @@ namespace MeLike.Services.Authentication
 
         public Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
         {
-            IdentityUser
+            throw new NotImplementedException();
         }
 
         public Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
