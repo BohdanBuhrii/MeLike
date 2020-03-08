@@ -1,15 +1,23 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu />
+<div class="sidebar blue-gradient">
+    <div class="col">
+        <NavMenu />
+    </div>
 </div>
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
-    </div>
+<div class="col" style="padding: 0!important">
+    <div class="main">
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
+        </div>
 
-    <div class="content px-4">
-        @Body
+        <div class="content px-4">
+            @Body
+        </div>
     </div>
+</div>
+
+<div class="col-3 float-right d-none d-lg-block blue-gradient">
+
 </div>

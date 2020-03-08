@@ -8,8 +8,8 @@
 
 @if (posts == null)
 {
-    <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
+    <div class="spinner-border" style="position:center" role="status">
+        
     </div>
 }
 else
@@ -20,18 +20,11 @@ else
     }
 }
 
-<button @onclick =@addPost>Add post</button>
-
 @code {
-    IEnumerable<PostViewModel> posts;
+    private IEnumerable<PostViewModel> posts;
 
     protected override async Task OnInitializedAsync()
     {
         posts = await PostService.GetAllPosts();
-    }
-
-    async Task addPost() 
-    {
-        await PostService.Create(new PostViewModel());
     }
 }

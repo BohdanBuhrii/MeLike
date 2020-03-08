@@ -1,22 +1,63 @@
 ﻿@using MeLike.Services.ViewModels
+@using MeLike.Services.Interfaces
+@using MeLike.Data.Enums
 
-<div>
+@inject IPostsService postService
+
+<div class="card purple-gradient">
     <h1>Post</h1>
     <hr />
     <h3>@Source.Author</h3>
     <p>@Source.Text</p>
     <hr />
-    <div>
-        <button class="btn btn-light">
-            <i class="fas fa-thumbs-up"></i>
-            Like
-        </button>
-        <button class="btn btn-light">
-            <i class="far fa-comment-alt"></i>
-            Comment
-        </button>
+    <div class="card-body">
+        <div>
+            @Source.Views views, @Source.Emotions.Count likes, @Source.Comments.Count comments
+        </div>
+        
+        @if (commentDisabled)
+        {
+            <div>
+                <input class="md-form form-control" />
+            </div>
+        }
+    </div>
+    <div class="card-footer">
+        <div>
+            <button class="btn btn-link" @onclick=@Like disabled=@likeDisabled>
+                <i class="fas fa-thumbs-up"></i>
+                Like
+            </button>
+            <button class="btn btn-link" @onclick=@Comment disabled=@commentDisabled>
+                <i class="far fa-comment-alt"></i>
+                Comment
+            </button>
+        </div>
     </div>
 </div>
 @code {
+    private bool likeDisabled { get; set; } = false;
+    private bool commentDisabled { get; set; } = false;
+
     [Parameter] public PostViewModel Source { get; set; }
+
+    private async Task Like()
+    {
+        likeDisabled = true;
+        await postService.AddEmotion(Source, EmotionType.Like);
+        likeDisabled = false;
+    }
+
+    private async Task Comment()
+    {
+        commentDisabled = true;
+
+
+        //commentDisabled = false;
+    }
+
+    private void DisableLike()
+    {
+        
+    }
 }
