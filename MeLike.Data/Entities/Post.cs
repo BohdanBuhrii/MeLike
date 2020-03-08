@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using MeLike.Data.Interfaces;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 namespace MeLike.Data.Entities
 {
     [BsonIgnoreExtraElements]
-    public class Post
+    public class Post : IAuditableEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
