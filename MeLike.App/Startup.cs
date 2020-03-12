@@ -1,5 +1,8 @@
+using MeLike.Authentication;
 using MeLike.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +25,8 @@ namespace MeLike.App
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            //services.AddScoped<MeLikeAuthenticationStateProvider>();
+            services.AddScoped<AuthenticationStateProvider, MeLikeAuthenticationStateProvider>();
             services.ConfigureServices();
         }
 
@@ -44,8 +49,13 @@ namespace MeLike.App
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

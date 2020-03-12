@@ -16,6 +16,7 @@ namespace MeLike.Services
             services.ConfigureMapper();
             services.AddScoped<IPostsService, PostsService>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
 
         private static void ConfigureMapper(this IServiceCollection services)

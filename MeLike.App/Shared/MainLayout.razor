@@ -1,23 +1,32 @@
-﻿@inherits LayoutComponentBase
+﻿@using MeLike.App.Shared.Components
 
-<div class="sidebar blue-gradient">
-    <div class="col">
-        <NavMenu />
-    </div>
-</div>
+@inherits LayoutComponentBase
 
-<div class="col p-0">
-    <div class="main">
-        <div class="top-row px-4">
-            <a href="https://github.com/BohdanBuhrii/MeLike" target="_blank">About</a>
+<AuthorizeView>
+    <Authorized>
+        <div class="sidebar blue-gradient">
+            <div class="col">
+                <NavMenu />
+            </div>
         </div>
 
-        <div class="content px-4">
-            @Body
+        <div class="col p-0">
+            <div class="main">
+                <div class="top-row px-4">
+                    <a href="https://github.com/BohdanBuhrii/MeLike" target="_blank">About</a>
+                </div>
+
+                <div class="content px-4">
+                    @Body
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<div class="col-3 float-right d-none d-lg-block blue-gradient">
+        <div class="col-3 float-right d-none d-lg-block blue-gradient">
 
-</div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <Login></Login>
+    </NotAuthorized>
+</AuthorizeView>

@@ -1,0 +1,53 @@
+﻿@using MeLike.Authentication
+
+@inject AuthenticationStateProvider authStateProvider
+
+<div class="container">
+    <!--Section: Content-->
+    <section class="p-5 my-md-5 text-center blue-gradient">
+        <form class="my-5 mx-md-5 md-form" action="">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <!-- Material form login -->
+                    <div class="card">
+                        <!--Card content-->
+                        <div class="card-body">
+                            <!-- Form -->
+                            <form class="md-form">
+
+                                <h3 class="font-weight-bold my-4 pb-2 text-center dark-grey-text">Log In</h3>
+
+                                <!-- Email -->
+                                <input type="email" id="inputValidationEx" class="form-control validate" placeholder="Email" @bind=@Email>
+                                <!--<label for="inputValidationEx" data-error="wrong" data-success="right">Type your email</label>-->
+                                
+                                <!-- Password -->
+                                <input type="password" id="inputValidationEx2" class="form-control validate" placeholder="Password" @bind=@Password>
+                                <!--<label for="inputValidationEx2" data-error="wrong" data-success="right">Type your password</label>-->
+
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-outline-blue btn-rounded my-4 waves-effect" @onclick=@LogIn>Log In</button>
+                                </div>
+
+                            </form>
+                            <!-- Form -->
+                        </div>
+                    </div>
+                    <!-- Material form login -->
+                </div>
+            </div>
+        </form>
+    </section>
+    <!--Section: Content-->
+</div>
+
+@code
+{
+    private string Email;
+    private string Password;
+
+    private async Task LogIn()
+    {
+        await ((MeLikeAuthenticationStateProvider)authStateProvider).SetUpNewUser(Email, Password);
+    }
+}
