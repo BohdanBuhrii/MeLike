@@ -1,12 +1,12 @@
-using MeLike.Authentication;
 using MeLike.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Net.Http;
 
 namespace MeLike.App
 {
@@ -23,10 +23,26 @@ namespace MeLike.App
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Blazor cookie configuration
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            services.AddAuthentication(
+                CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+
+            // Blazor server setup
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            //services.AddScoped<MeLikeAuthenticationStateProvider>();
-            services.AddScoped<AuthenticationStateProvider, MeLikeAuthenticationStateProvider>();
+
+            // Include HttpClient and HttpContextAccessor
+            services.AddHttpContextAccessor();
+            services.AddScoped<HttpContextAccessor>();
+            services.AddHttpClient();
+            services.AddScoped<HttpClient>();
+            
             services.ConfigureServices();
         }
 
@@ -49,9 +65,10 @@ namespace MeLike.App
 
             app.UseRouting();
 
+            app.UseCookiePolicy();
+
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {
