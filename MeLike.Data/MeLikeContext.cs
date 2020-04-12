@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using MeLike.Data.Configuration;
 using MeLike.Data.Entities;
 using MeLike.Data.Interfaces;
 using MongoDB.Driver;
@@ -35,11 +36,10 @@ namespace MeLike.Data
             }
         }
 
-        public MeLikeContext()
+        public MeLikeContext(ClientConfiguration configuration)
         {
-            // TODO
-            var client = new MongoClient("mongodb://localhost:27017");
-            _database = client.GetDatabase("melikedb");
+            var client = new MongoClient(configuration.ConnectionString);
+            _database = client.GetDatabase(configuration.DatabaseName);
         }
 
         public Task SaveChangesAsync()

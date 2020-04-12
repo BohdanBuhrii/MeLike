@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MeLike.Data;
+using MeLike.Data.Configuration;
 using MeLike.Data.Entities;
 using MeLike.Services.ImplementedServices;
 using MeLike.Services.Interfaces;
