@@ -6,13 +6,7 @@
 
 @inject IPostsService PostService
 
-@if (posts == null)
-{
-    <div class="spinner-border" style="position:center" role="status">
-        
-    </div>
-}
-else
+@if (posts != null)
 {
     @foreach (var post in posts)
     {
@@ -20,11 +14,50 @@ else
     }
 }
 
+@if (loading)
+{
+    <div class="align-middle text-center">
+        <div class="spinner-border">
+        </div>
+    </div>
+}
+
+@if (posts == null && !loading)
+{
+    <h3>Error while loading ...</h3>
+}
+
+<div class="text-center">
+    <button class="btn btn-link" @onclick=@UploadMorePosts>
+        Read more posts
+    </button>
+</div>
 @code {
     private IEnumerable<PostViewModel> posts;
+    private PageViewModel page = new PageViewModel();
+    private bool loading;
 
     protected override async Task OnInitializedAsync()
     {
-        posts = await PostService.GetAllPosts();
+        posts = await Load(PostService.GetAllPosts(page));
+    }
+
+    private async Task UploadMorePosts()
+    {
+        page.Number += 1;
+        posts = posts.Concat(await Load(PostService.GetAllPosts(page)));
+    }
+
+    private async Task<T> Load<T>(Task<T> resourse)
+    {
+        try
+        {
+            loading = true;
+            return await resourse;
+        }
+        finally
+        {
+            loading = false;
+        }
     }
 }

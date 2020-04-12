@@ -20,9 +20,12 @@ namespace MeLike.Authentication
             _authService = authService;
         }
 
-        public override Task<AuthenticationState> GetAuthenticationStateAsync()
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            return Task.FromResult(authenticationState);
+            // TODO cookies
+            await SetUpNewUser("testemail@gmail.com", "11111111");
+
+            return authenticationState;
         }
 
         public async Task SetUpNewUser(string email, string password)
@@ -31,17 +34,14 @@ namespace MeLike.Authentication
 
             if (await _authService.IsCredentialsValid(email, password))
             {
-                var user = await _usersService.GetUserByEmail(email);
-
+                _usersService.User = await _usersService.GetUserByEmail(email); ;
 
                 identity = new ClaimsIdentity(new List<Claim>
                         {
-                            new Claim(ClaimTypes.Email, user.Email),
-                            new Claim(ClaimTypes.Name, user.Login)
+                            new Claim(ClaimTypes.Email, _usersService.User.Email),
+                            new Claim(ClaimTypes.Name, _usersService.User.Login)
 
                         }, "ServerAuth");
-
-                _usersService.User = user;
             }
             else
             {
@@ -50,7 +50,7 @@ namespace MeLike.Authentication
             }
 
             authenticationState = new AuthenticationState(new ClaimsPrincipal(identity));
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            NotifyAuthenticationStateChanged(Task.FromResult(authenticationState));
         }
     }
 }

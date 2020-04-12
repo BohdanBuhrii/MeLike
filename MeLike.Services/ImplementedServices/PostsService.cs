@@ -19,7 +19,7 @@ namespace MeLike.Services.ImplementedServices
         private readonly IMongoQueryable<Post> _posts;
         private readonly IMapper _mapper;
         private readonly IUsersService _usersService;
-        
+
         public PostsService(IMeLikeContext context, IMapper mapper, IUsersService usersService)
         {
             _context = context;
@@ -36,27 +36,39 @@ namespace MeLike.Services.ImplementedServices
             return _mapper.Map<PostViewModel>(post);
         }
 
-        public async Task<IEnumerable<PostViewModel>> GetAllPosts() 
+        public async Task<IEnumerable<PostViewModel>> GetAllPosts(PageViewModel page)
         {
-            var posts = await _posts.ToListAsync();
+            var posts = await _posts
+                .Skip(page.Number * page.Size)
+                .Take(page.Size)
+                .ToListAsync();
+
             await UpdateViews(posts);
 
             return _mapper.Map<IEnumerable<PostViewModel>>(posts);
         }
 
-        public async Task<IEnumerable<PostViewModel>> GetPostsByUserLogin(string userLogin)
+        public async Task<IEnumerable<PostViewModel>> GetPostsByUserLogin(string userLogin, PageViewModel page)
         {
-            var posts = await _posts.Where(p => p.Author == userLogin).ToListAsync();
+            var posts = await _posts
+                .Where(p => p.Author == userLogin)
+                .Skip(page.Number * page.Size)
+                .Take(page.Size)
+                .ToListAsync();
+
             await UpdateViews(posts);
-                
+
             return _mapper.Map<IEnumerable<PostViewModel>>(posts);
         }
 
-        public async Task<IEnumerable<PostViewModel>> GetPostsByUserFriends()
+        public async Task<IEnumerable<PostViewModel>> GetPostsByUserFriends(PageViewModel page)
         {
-            var posts = await _posts.Where(p => _usersService.User.Friends.Contains(p.Author))
-                                    .OrderBy(p => p.PublishDate)
-                                    .ToListAsync();
+            var posts = await _posts
+                .Where(p => _usersService.User.Friends.Contains(p.Author))
+                .OrderBy(p => p.PublishDate)
+                .Skip(page.Number * page.Size)
+                .Take(page.Size)
+                .ToListAsync();
 
             await UpdateViews(posts);
 
@@ -85,7 +97,7 @@ namespace MeLike.Services.ImplementedServices
 
             var filter = Builders<Post>.Filter.Eq(el => el.Id, post.Id);
 
-            var setter = 
+            var setter =
                 post.Emotions.Any(e => e.Author == emotion.Author && e.Type == emotion.Type)
                     ? Builders<Post>.Update.Pull(p => p.Emotions, emotion)
                     : Builders<Post>.Update.Push(el => el.Emotions, emotion);
@@ -111,7 +123,7 @@ namespace MeLike.Services.ImplementedServices
             foreach (var post in posts)
             {
                 await UpdateViews(post);
-            }            
+            }
         }
 
         private Task UpdateViews(Post post)

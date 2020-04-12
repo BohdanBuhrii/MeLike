@@ -4,23 +4,22 @@
 
 @inject IPostsService postService
 
-<div class="card purple-gradient">
-    <h1>Post</h1>
-    <hr />
-    <h3>@Source.Author</h3>
-    <p>@Source.Text</p>
-    <hr />
+<div class="card">
+    
     <div class="card-body">
-        <div>
-            @Source.Views views, @Source.Emotions.Count likes, @Source.Comments.Count comments
+        <h3>@Source.Author</h3>
+
+        <hr />
+        <div class="">
+            <p>@Source.Text</p>
         </div>
-        
-        @if (commentDisabled)
-        {
+        <hr />
+        <div class="">
             <div>
-                <input class="md-form form-control" />
+                @Source.Views views, @Source.Emotions.Count likes, @Source.Comments.Count comments
             </div>
-        }
+
+        </div>
     </div>
     <div class="card-footer">
         <div>
@@ -28,16 +27,25 @@
                 <i class="fas fa-thumbs-up"></i>
                 Like
             </button>
-            <button class="btn btn-link" @onclick=@Comment disabled=@commentDisabled>
+            <button class="btn btn-link" @onclick="@(e => @commentDisabled=!@commentDisabled)">
                 <i class="far fa-comment-alt"></i>
                 Comment
             </button>
         </div>
     </div>
+    @if (commentDisabled)
+    {
+        <div class="md-form m-0 p-0">
+            <input class="text col-6 ml-5" @bind-value="comment" required/>&nbsp;
+            <button class="btn btn-link col-auto" @onclick=postComment>Let them know!</button>
+        </div>
+    }
 </div>
 @code {
     private bool likeDisabled { get; set; } = false;
     private bool commentDisabled { get; set; } = false;
+    private bool commentListDisabled { get; set; } = false;
+    private string comment;
 
     [Parameter] public PostViewModel Source { get; set; }
 
@@ -48,16 +56,12 @@
         likeDisabled = false;
     }
 
-    private async Task Comment()
+    private async Task postComment()
     {
+        if (string.IsNullOrWhiteSpace(comment)) return;
+
         commentDisabled = true;
-
-
-        //commentDisabled = false;
-    }
-
-    private void DisableLike()
-    {
-        
+        await postService.AddComment(Source, comment);
+        comment = string.Empty;
     }
 }

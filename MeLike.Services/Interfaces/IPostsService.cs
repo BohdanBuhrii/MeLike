@@ -9,11 +9,11 @@ namespace MeLike.Services.Interfaces
     {
         Task<PostViewModel> GetPostById(string postId);
 
-        Task<IEnumerable<PostViewModel>> GetAllPosts();
+        Task<IEnumerable<PostViewModel>> GetAllPosts(PageViewModel page);
 
-        Task<IEnumerable<PostViewModel>> GetPostsByUserLogin(string userLogin);
+        Task<IEnumerable<PostViewModel>> GetPostsByUserLogin(string userLogin, PageViewModel page);
 
-        Task<IEnumerable<PostViewModel>> GetPostsByUserFriends();
+        Task<IEnumerable<PostViewModel>> GetPostsByUserFriends(PageViewModel page);
 
         Task<PostViewModel> FetchChanges(PostViewModel post);
 
