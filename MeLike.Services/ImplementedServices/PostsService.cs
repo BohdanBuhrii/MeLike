@@ -25,7 +25,7 @@ namespace MeLike.Services.ImplementedServices
             _context = context;
             _mapper = mapper;
             _usersService = usersService;
-            _posts = _context.Posts.AsQueryable();
+            _posts = _context.Posts.AsQueryable().OrderByDescending(p => p.PublishDate);
         }
 
         public async Task<PostViewModel> GetPostById(string postId)
@@ -65,7 +65,6 @@ namespace MeLike.Services.ImplementedServices
         {
             var posts = await _posts
                 .Where(p => _usersService.User.Friends.Contains(p.Author))
-                .OrderBy(p => p.PublishDate)
                 .Skip(page.Number * page.Size)
                 .Take(page.Size)
                 .ToListAsync();
@@ -82,6 +81,10 @@ namespace MeLike.Services.ImplementedServices
 
         public Task Create(PostViewModel post)
         {
+            if (string.IsNullOrWhiteSpace(post.Text)) {
+                return Task.FromResult(1);
+            }
+
             var entity = _mapper.Map<Post>(post);
             entity.PublishDate = DateTime.Now;
             entity.Author = _usersService.User.Login;

@@ -4,7 +4,7 @@
 
 @inject IPostsService postService
 
-<div class="card">
+<div class="card mb-2">
     
     <div class="card-body">
         <h3>@Source.Author</h3>
@@ -14,11 +14,18 @@
             <p>@Source.Text</p>
         </div>
         <hr />
-        <div class="">
+        <div>
             <div>
-                @Source.Views views, @Source.Emotions.Count likes, @Source.Comments.Count comments
+                @Source.Views views,
+                @Source.Emotions.Count
+                <a class="btn-link" @onclick=@(e => likeListEnabled =! likeListEnabled)>
+                    likes,
+                </a>
+                @Source.Comments.Count
+                <a class="btn-link" @onclick=@(e => commentListEnabled =! commentListEnabled)>
+                    comments
+                </a>
             </div>
-
         </div>
     </div>
     <div class="card-footer">
@@ -27,24 +34,51 @@
                 <i class="fas fa-thumbs-up"></i>
                 Like
             </button>
-            <button class="btn btn-link" @onclick="@(e => @commentDisabled=!@commentDisabled)">
+            <button class="btn btn-link" @onclick="@(e => @commentEnabled=!@commentEnabled)">
                 <i class="far fa-comment-alt"></i>
                 Comment
             </button>
         </div>
     </div>
-    @if (commentDisabled)
+    @if (commentEnabled)
     {
         <div class="md-form m-0 p-0">
             <input class="text col-6 ml-5" @bind-value="comment" required/>&nbsp;
             <button class="btn btn-link col-auto" @onclick=postComment>Let them know!</button>
         </div>
     }
+
+    @if (commentListEnabled)
+    {
+        <div class="overflow-auto" style="max-height: 20em">
+        @foreach (var c in Source.Comments)
+        {
+            <div class="border border-light rounded bg-light m-4">
+                <h5>@c.Author</h5>
+                <a>@c.Text</a>
+            </div>
+        }
+    </div>
+    }
+
+    @if (likeListEnabled)
+    {
+        <div class="overflow-auto"  style="max-height: 20em">
+            @foreach (var e in Source.Emotions)
+            {
+                <div class="border rounded m-4">
+                    <a class="font-weight-bold">@e.Author</a> <i class="fas fa-thumbs-up"></i>
+                </div>
+            }
+        </div>
+    }
 </div>
+
 @code {
     private bool likeDisabled { get; set; } = false;
-    private bool commentDisabled { get; set; } = false;
-    private bool commentListDisabled { get; set; } = false;
+    private bool commentEnabled { get; set; } = false;
+    private bool commentListEnabled { get; set; } = false;
+    private bool likeListEnabled { get; set; } = false;
     private string comment;
 
     [Parameter] public PostViewModel Source { get; set; }
@@ -60,7 +94,7 @@
     {
         if (string.IsNullOrWhiteSpace(comment)) return;
 
-        commentDisabled = true;
+        commentEnabled = true;
         await postService.AddComment(Source, comment);
         comment = string.Empty;
     }

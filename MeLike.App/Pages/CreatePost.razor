@@ -4,26 +4,30 @@
 @page "/posts/new"
 @inject IPostsService postsService
 
-<h3> Write something interesting ... </h3>
+<div class="md-form m-0 p-0 card">
 
+    <div class="card-body">
+        <h3> Write something interesting ... </h3>
 
+        <input placeholder="Title" class="text col-auto p-0" @bind-value="post.Title" />
+        <textarea class="md-textarea form-control col-auto"
+                  rows="5"
+                  @bind-value="post.Text"
+                  @bind-value:event="oninput"
+                  placeholder="Post content" />
+    </div>
+    <div class="card-footer">
+        <button class="btn text-center btn-light" @onclick="@OnSubmit">Publish</button>
+    </div>
+</div>
 
-
-<EditForm Model="@post" OnValidSubmit="OnSubmit">
-    
-    <InputText id="title" @bind-Value="post.Title" />
-
-    <InputText id="text" @bind-Value="post.Text" />
-
-    <button type="submit">Publish</button>
-</EditForm>
 
 @code {
     private PostViewModel post = new PostViewModel();
 
     private void OnSubmit()
     {
-        postsService.Create(post);
+         postsService.Create(post);
         post = new PostViewModel();
     }
 }
