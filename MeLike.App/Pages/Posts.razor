@@ -39,13 +39,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        posts = await Load(PostService.GetAllPosts(page));
+        posts = await Load(PostService.GetPostsByUserFriends(page));
     }
 
     private async Task UploadMorePosts()
     {
         page.Number += 1;
-        posts = posts.Concat(await Load(PostService.GetAllPosts(page)));
+        posts = posts.Concat(await Load(PostService.GetPostsByUserFriends(page)));
     }
 
     private async Task<T> Load<T>(Task<T> resourse)

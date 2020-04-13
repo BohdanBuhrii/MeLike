@@ -29,5 +29,34 @@ namespace MeLike.Services.ImplementedServices
             return _mapper.Map<UserViewModel>(
                 await _users.FirstOrDefaultAsync(u => u.Email == email));
         }
+
+        public async Task<UserViewModel> GetUserByLogin(string login)
+        {
+            return _mapper.Map<UserViewModel>(
+                await _users.FirstOrDefaultAsync(u => u.Login == login));
+        }
+
+        public async Task AddFriend(string friendLogin)
+        {
+            var setter = Builders<User>.Update.Push(el => el.Friends, friendLogin);
+
+            await _context.Users.UpdateOneAsync(el => el.Id == User.Id, setter);
+        }
+
+        public async Task DeleteFriend(string friendLogin)
+        {
+            var setter = Builders<User>.Update.Pull(el => el.Friends, friendLogin);
+
+            await _context.Users.UpdateOneAsync(el => el.Id == User.Id, setter);
+        }
+
+        public async Task RenameUser(string newName)
+        {
+            var changeLog = new UserNameChangeLog { Old = User.Login, New = newName };
+            var setter = Builders<User>.Update.Set(el => el.Login, newName);
+
+            await _context.Users.UpdateOneAsync(el => el.Id == User.Id, setter);
+            await _context.UserNameChangeLogs.InsertOneAsync(changeLog);
+        }
     }
 }

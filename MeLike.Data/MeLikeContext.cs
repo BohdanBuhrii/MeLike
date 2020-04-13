@@ -10,6 +10,7 @@ namespace MeLike.Data
     {
         private IMongoCollection<Post> _posts;
         private IMongoCollection<User> _users;
+        private IMongoCollection<UserNameChangeLog> _userNameChangeLogs;
         private readonly IMongoDatabase _database;
 
         public IMongoCollection<Post> Posts
@@ -33,6 +34,18 @@ namespace MeLike.Data
                     _users = _database.GetCollection<User>("users");
                 }
                 return _users;
+            }
+        }
+
+        public IMongoCollection<UserNameChangeLog> UserNameChangeLogs
+        {
+            get
+            {
+                if (_userNameChangeLogs == null)
+                {
+                    _userNameChangeLogs = _database.GetCollection<UserNameChangeLog>("usernamechangelogs");
+                }
+                return _userNameChangeLogs;
             }
         }
 

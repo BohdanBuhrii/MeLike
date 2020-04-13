@@ -97,9 +97,7 @@ namespace MeLike.Services.ImplementedServices
         public async Task AddEmotion(PostViewModel post, EmotionType emotionType)
         {
             var emotion = new Emotion { Author = _usersService.User.Login, Type = emotionType };
-
-            var filter = Builders<Post>.Filter.Eq(el => el.Id, post.Id);
-
+            
             var setter =
                 post.Emotions.Any(e => e.Author == emotion.Author && e.Type == emotion.Type)
                     ? Builders<Post>.Update.Pull(p => p.Emotions, emotion)
@@ -112,8 +110,6 @@ namespace MeLike.Services.ImplementedServices
         public async Task AddComment(PostViewModel post, string text)
         {
             var comment = new Comment { Author = _usersService.User.Login, Text = text };
-
-            var filter = Builders<Post>.Filter.Eq(el => el.Id, post.Id);
 
             var setter = Builders<Post>.Update.Push(el => el.Comments, comment);
 

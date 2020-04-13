@@ -10,6 +10,8 @@ namespace MeLike.Data.Interfaces
 
         IMongoCollection<User> Users { get; }
 
+        IMongoCollection<UserNameChangeLog> UserNameChangeLogs { get; }
+
         Task SaveChangesAsync();
     }
 }
