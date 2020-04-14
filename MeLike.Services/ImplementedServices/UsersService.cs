@@ -5,6 +5,7 @@ using MeLike.Services.Interfaces;
 using MeLike.Services.ViewModels;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MeLike.Services.ImplementedServices
@@ -24,6 +25,19 @@ namespace MeLike.Services.ImplementedServices
 
         public UserViewModel User { get; set; }
 
+        public async Task<IEnumerable<UserViewModel>> GetAllUsers(PageViewModel page)
+        {
+            var posts = await _users
+                .Where(u => u.Login != User.Login)
+                .OrderBy(u => u.Login)
+                .Skip(page.Number * page.Size)
+                .Take(page.Size)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<UserViewModel>>(posts);
+        }
+
+
         public async Task<UserViewModel> GetUserByEmail(string email)
         {
             return _mapper.Map<UserViewModel>(
@@ -41,6 +55,8 @@ namespace MeLike.Services.ImplementedServices
             var setter = Builders<User>.Update.Push(el => el.Friends, friendLogin);
 
             await _context.Users.UpdateOneAsync(el => el.Id == User.Id, setter);
+            
+            User.Friends.Add(friendLogin);
         }
 
         public async Task DeleteFriend(string friendLogin)
@@ -48,6 +64,8 @@ namespace MeLike.Services.ImplementedServices
             var setter = Builders<User>.Update.Pull(el => el.Friends, friendLogin);
 
             await _context.Users.UpdateOneAsync(el => el.Id == User.Id, setter);
+
+            User.Friends.Remove(friendLogin);
         }
 
         public async Task RenameUser(string newName)

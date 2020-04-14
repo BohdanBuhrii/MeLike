@@ -41,7 +41,6 @@ namespace MeLikeDBUpdateWorker
         {
             while (true)
             {
-                //var change = new UserNameChangeLog { Old="Test Login", New="Petro P." };
                 var change = await _context.UserNameChangeLogs.FindOneAndDeleteAsync(el => true);
 
                 if (change == null) break;

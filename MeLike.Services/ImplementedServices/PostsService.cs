@@ -64,7 +64,7 @@ namespace MeLike.Services.ImplementedServices
         public async Task<IEnumerable<PostViewModel>> GetPostsByUserFriends(PageViewModel page)
         {
             var posts = await _posts
-                .Where(p => _usersService.User.Friends.Contains(p.Author))
+                .Where(p => _usersService.User.Friends.Contains(p.Author) || p.Author == _usersService.User.Login)
                 .Skip(page.Number * page.Size)
                 .Take(page.Size)
                 .ToListAsync();

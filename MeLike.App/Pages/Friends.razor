@@ -1,0 +1,84 @@
+﻿@page "/friends"
+
+@using MeLike.Services.ViewModels
+@using MeLike.Services.Interfaces
+
+@inject IUsersService UsersService
+
+@if (users != null)
+{
+    @foreach (var user in users)
+    {
+        <div class="card card-body">
+            <a>
+                @user.Login, 
+                @user.Email
+            </a>
+            
+            Friends: @string.Join(',', user.Friends.Take(3)) ...
+
+            @if(UsersService.User.Friends.Contains(user.Login))
+            {
+                <button class="btn btn-link float-right" @onclick=@(e => UsersService.DeleteFriend(user.Login))>
+                    Unfollow
+                </button>
+            }
+            else
+            {   
+                <button class="btn btn-primary float-right" @onclick=@(e => UsersService.AddFriend(user.Login))>
+                    Follow
+                </button>
+            }
+            
+        </div>
+    }
+}
+
+@if (loading)
+{
+    <div class="align-middle text-center">
+        <div class="spinner-border">
+        </div>
+    </div>
+}
+
+@if (users == null && !loading)
+{
+    <h3>Error while loading ...</h3>
+}
+
+<div class="text-center">
+    <button class="btn btn-link" @onclick=@UploadMoreUsers>
+        View more Users
+    </button>
+</div>
+
+@code {
+    private IEnumerable<UserViewModel> users;
+    private PageViewModel page = new PageViewModel { Size = 10 };
+    private bool loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Load(UsersService.GetAllUsers(page));
+    }
+
+    private async Task UploadMoreUsers()
+    {
+        page.Number += 1;
+        users = users.Concat(await Load(UsersService.GetAllUsers(page)));
+    }
+
+    private async Task<T> Load<T>(Task<T> resourse)
+    {
+        try
+        {
+            loading = true;
+            return await resourse;
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}
