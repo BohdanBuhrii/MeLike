@@ -1,0 +1,33 @@
+﻿@using MeLike.Services.ViewModels
+@using MeLike.Services.Interfaces
+
+@page "/profile"
+@inject IUsersService UsersService
+
+<div class="md-form m-0 p-0 card">
+
+    <div class="card-body">
+        <div>
+            <h3> @UsersService.User.Login </h3>
+            <h5> @UsersService.User.Email </h5>
+        </div>
+        <hr />
+        <div>
+            <input placeholder="New login" class="text col-auto p-0" @bind-value="newLogin" />
+            <button class="btn btn-primary" @onclick=@ChangeLogin> Rename </button>
+        </div>
+    </div>
+
+    <div class="card-footer">
+    </div>
+</div>
+
+
+@code {
+    private string newLogin;
+
+    private async Task ChangeLogin()
+    {
+        await UsersService.RenameUser(newLogin);
+    }
+}

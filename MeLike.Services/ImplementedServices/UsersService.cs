@@ -75,6 +75,8 @@ namespace MeLike.Services.ImplementedServices
 
             await _context.Users.UpdateOneAsync(el => el.Id == User.Id, setter);
             await _context.UserNameChangeLogs.InsertOneAsync(changeLog);
+
+            User.Login = newName;
         }
     }
 }
