@@ -23,7 +23,8 @@ namespace MeLike.Authentication
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             // TODO cookies
-            await SetUpNewUser("testemail@gmail.com", "11111111");
+            var user = await _usersService.GetUserByEmail("testemail@gmail.com");
+            await SetUpNewUser(user.Email, user.HashPassword);
 
             return authenticationState;
         }
