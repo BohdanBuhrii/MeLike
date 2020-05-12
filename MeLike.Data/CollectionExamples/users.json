@@ -1,5 +1,37 @@
-{"_id":{"$oid":"5e6662a5dab4515614bd97f5"},"Login":"bohdan@gmail.com","Email":"bohdan@gmail.com","HashPassword":"11111111","Friends":[]}
-{"_id":{"$oid":"5e80e9fee927ec41cc4d3248"},"Login":"New Test Login","Email":"testemail@gmail.com","HashPassword":"11111111","Friends":["Bohdan","Big Boss","Petro P.","Victor","bohdan@gmail.com"]}
-{"_id":{"$oid":"5e955ae44426cf10787ce672"},"Login":"Victor","Email":"victor@gmail.com","HashPassword":"11111111","Friends":["Bohdan","Petro P.","Big Boss"]}
-{"_id":{"$oid":"5e955b1c4426cf10787ce673"},"Login":"Petro P.","Email":"roshen@gmail.com","HashPassword":"11111111","Friends":[]}
-{"_id":{"$oid":"5e95612d4426cf10787ce674"},"Login":"Big Boss","Email":"myboss@gmail.com","HashPassword":"11111111","Friends":["Bohdan","Petro P."]}
+[
+    {
+        "_id": { "$oid": "5e6662a5dab4515614bd97f5" },
+        "Login": "bohdan@gmail.com",
+        "Email": "bohdan@gmail.com",
+        "HashPassword": "11111111",
+        "Friends": []
+    },
+    {
+        "_id": { "$oid": "5e80e9fee927ec41cc4d3248" },
+        "Login": "New Test Login",
+        "Email": "testemail@gmail.com",
+        "HashPassword": "11111111",
+        "Friends": [ "Bohdan", "Big Boss", "Petro P.", "Victor", "bohdan@gmail.com" ]
+    },
+    {
+        "_id": { "$oid": "5e955ae44426cf10787ce672" },
+        "Login": "Victor",
+        "Email": "victor@gmail.com",
+        "HashPassword": "11111111",
+        "Friends": [ "Bohdan", "Petro P.", "Big Boss" ]
+    },
+    {
+        "_id": { "$oid": "5e955b1c4426cf10787ce673" },
+        "Login": "Petro P.",
+        "Email": "roshen@gmail.com",
+        "HashPassword": "11111111",
+        "Friends": []
+    },
+    {
+        "_id": { "$oid": "5e95612d4426cf10787ce674" },
+        "Login": "Big Boss",
+        "Email": "myboss@gmail.com",
+        "HashPassword": "11111111",
+        "Friends": [ "Bohdan", "Petro P." ]
+    }
+]
