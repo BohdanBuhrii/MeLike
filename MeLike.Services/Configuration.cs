@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using MeLike.Data;
 using MeLike.Data.Configuration;
 using MeLike.Data.Entities;
+using MeLike.Data.Graph.Configuration;
 using MeLike.Services.ImplementedServices;
 using MeLike.Services.Interfaces;
 using MeLike.Services.ViewModels;
@@ -14,6 +14,7 @@ namespace MeLike.Services
         public static void ConfigureServices(this IServiceCollection services)
         {
             services.ConfigureDataAccess();
+            services.ConfigureGraphAccess();
             services.ConfigureMapper();
             services.AddScoped<IPostsService, PostsService>();
             services.AddScoped<IUsersService, UsersService>();

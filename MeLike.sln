@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeLike.Data", "MeLike.Data\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeLike.Services", "MeLike.Services\MeLike.Services.csproj", "{6B72A259-17B9-4FFF-A266-2D57FE530B33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeLikeDBUpdateWorker", "MeLikeDBUpdateWorker\MeLikeDBUpdateWorker.csproj", "{30DEF3C1-AFE3-4BA2-AB01-7A09185031B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeLikeDBUpdateWorker", "MeLikeDBUpdateWorker\MeLikeDBUpdateWorker.csproj", "{30DEF3C1-AFE3-4BA2-AB01-7A09185031B4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeLike.Data.Graph", "MeLike.Data.Graph\MeLike.Data.Graph.csproj", "{07B92034-688E-4348-9ADF-197BCF284F2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{30DEF3C1-AFE3-4BA2-AB01-7A09185031B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30DEF3C1-AFE3-4BA2-AB01-7A09185031B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30DEF3C1-AFE3-4BA2-AB01-7A09185031B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B92034-688E-4348-9ADF-197BCF284F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B92034-688E-4348-9ADF-197BCF284F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B92034-688E-4348-9ADF-197BCF284F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B92034-688E-4348-9ADF-197BCF284F2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -25,7 +25,6 @@ namespace MeLike.App
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            //services.AddScoped<MeLikeAuthenticationStateProvider>();
             services.AddScoped<AuthenticationStateProvider, MeLikeAuthenticationStateProvider>();
             services.ConfigureServices();
         }
