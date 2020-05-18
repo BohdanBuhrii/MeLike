@@ -32,13 +32,11 @@ namespace MeLike.Data.Graph.Repositories
 
         public Task AddFollower(UserNode follower, UserNode target)
         {
-            var q = _client.Cypher
+            return _client.Cypher
                 .Match("(left: User {Email: {leftEmail}})", "(right: User {Email: {rightEmail}})")
                 .WithParam("leftEmail", follower.Email)
                 .WithParam("rightEmail", target.Email)
-                .Create("(left)-[:" + Follows + "]->(right)");
-
-            return q
+                .Create("(left)-[:" + Follows + "]->(right)")
                 .ExecuteWithoutResultsAsync();
         }
 
