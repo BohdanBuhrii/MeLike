@@ -1,4 +1,5 @@
-﻿using MeLike.Data.Entities;
+﻿using MeLike.Data.Graph.Interfaces;
+using MeLike.Data.Graph.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Neo4jClient;
 using System;
@@ -14,6 +15,7 @@ namespace MeLike.Data.Graph.Configuration
             ));
 
             services.AddSingleton<IGraphClientFactory, GraphClientFactory>();
+            services.AddSingleton<IUserConnectionsRepository, UserConnectionsRepository>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿@page "/friends"
 
+@using Data.Graph.Enums
 @using MeLike.Services.ViewModels
 @using MeLike.Services.Interfaces
 
@@ -10,11 +11,15 @@
     @foreach (var user in users)
     {
         <div class="card card-body">
-            <a>
+            <h5>
                 @user.Login, 
                 @user.Email
-            </a>
+            </h5>
             
+            <div>
+                @GetUserConnection(user)
+            </div>
+
             Friends: @string.Join(',', user.Friends.Take(3)) ...
 
             @if(UsersService.User.Friends.Contains(user.Login))
@@ -60,7 +65,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        users = await Load(UsersService.GetAllUsers(page));
+        users = await Load(UsersService.GetAllUsers(page, true));
     }
 
     private async Task UploadMoreUsers()
@@ -80,5 +85,17 @@
         {
             loading = false;
         }
+    }
+
+    private string GetUserConnection(UserViewModel user)
+    {
+        return user.ConnectionType switch
+        {
+            ConnectionType.YouFollows => "Friend",
+            ConnectionType.Second => "Second",
+            ConnectionType.Third => "Third",
+            
+            _ => ""
+        };
     }
 }

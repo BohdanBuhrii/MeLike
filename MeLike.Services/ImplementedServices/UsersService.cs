@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using MeLike.Data.Entities;
+using MeLike.Data.Graph.Enums;
+using MeLike.Data.Graph.Interfaces;
+using MeLike.Data.Graph.Nodes;
 using MeLike.Data.Interfaces;
 using MeLike.Services.Interfaces;
 using MeLike.Services.ViewModels;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MeLike.Services.ImplementedServices
@@ -14,29 +18,40 @@ namespace MeLike.Services.ImplementedServices
     {
         private readonly IMeLikeContext _context;
         private readonly IMongoQueryable<User> _users;
+        private readonly IUserConnectionsRepository _connectionsRepository;
         private readonly IMapper _mapper;
 
-        public UsersService(IMeLikeContext context, IMapper mapper)
+        public UsersService(IMeLikeContext context, IUserConnectionsRepository connectionsRepository, IMapper mapper)
         {
             _context = context;
+            _connectionsRepository = connectionsRepository;
             _mapper = mapper;
             _users = _context.Users.AsQueryable();
         }
 
         public UserViewModel User { get; set; }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllUsers(PageViewModel page)
+        public async Task<IEnumerable<UserViewModel>> GetAllUsers(PageViewModel page, bool includeConnections = false)
         {
-            var posts = await _users
+            var users = await _users
                 .Where(u => u.Login != User.Login)
                 .OrderBy(u => u.Login)
                 .Skip(page.Number * page.Size)
                 .Take(page.Size)
                 .ToListAsync();
 
-            return _mapper.Map<IEnumerable<UserViewModel>>(posts);
-        }
+            var viewModels = _mapper.Map<IEnumerable<UserViewModel>>(users);
 
+            if (includeConnections)
+            {
+                foreach (var model in viewModels)
+                {
+                    model.ConnectionType = await FindConnectionTo(model);
+                }
+            }
+
+            return viewModels;
+        }
 
         public async Task<UserViewModel> GetUserByEmail(string email)
         {
@@ -57,6 +72,10 @@ namespace MeLike.Services.ImplementedServices
             await _context.Users.UpdateOneAsync(el => el.Id == User.Id, setter);
             
             User.Friends.Add(friendLogin);
+
+            await _connectionsRepository.AddFollower(
+                _mapper.Map<UserNode>(User),
+                _mapper.Map<UserNode>(await GetUserByLogin(friendLogin)));
         }
 
         public async Task DeleteFriend(string friendLogin)
@@ -66,6 +85,10 @@ namespace MeLike.Services.ImplementedServices
             await _context.Users.UpdateOneAsync(el => el.Id == User.Id, setter);
 
             User.Friends.Remove(friendLogin);
+
+            await _connectionsRepository.RemoveFollower(
+                _mapper.Map<UserNode>(User),
+                _mapper.Map<UserNode>(await GetUserByLogin(friendLogin)));
         }
 
         public async Task RenameUser(string newName)
@@ -77,6 +100,23 @@ namespace MeLike.Services.ImplementedServices
             await _context.UserNameChangeLogs.InsertOneAsync(changeLog);
 
             User.Login = newName;
+        }
+
+        public async Task<ConnectionType> FindConnectionTo(UserViewModel user)
+        {
+            var path = await _connectionsRepository.GetConnectingPath(
+                _mapper.Map<UserNode>(User),
+                _mapper.Map<UserNode>(user),
+                length: 3);
+
+            if (path == null)
+            {
+                return ConnectionType.Other;
+            }
+
+            return  (ConnectionType) (path.Count() - 1);
+
+
         }
     }
 }

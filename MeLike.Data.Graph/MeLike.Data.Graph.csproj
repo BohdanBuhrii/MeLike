@@ -9,8 +9,4 @@
     <PackageReference Include="Neo4jClient" Version="3.1.0.6" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MeLike.Data\MeLike.Data.csproj" />
-  </ItemGroup>
-
 </Project>

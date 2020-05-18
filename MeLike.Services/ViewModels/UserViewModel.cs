@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MeLike.Data.Graph.Enums;
+using System.Collections.Generic;
 
 namespace MeLike.Services.ViewModels
 {
@@ -11,6 +12,8 @@ namespace MeLike.Services.ViewModels
         public string Email { get; set; }
 
         public string HashPassword { get; set; }
+
+        public ConnectionType ConnectionType { get; set; }
 
         public List<string> Friends { get; set; }
     }

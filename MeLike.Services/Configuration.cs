@@ -2,6 +2,7 @@
 using MeLike.Data.Configuration;
 using MeLike.Data.Entities;
 using MeLike.Data.Graph.Configuration;
+using MeLike.Data.Graph.Nodes;
 using MeLike.Services.ImplementedServices;
 using MeLike.Services.Interfaces;
 using MeLike.Services.ViewModels;
@@ -33,6 +34,10 @@ namespace MeLike.Services
                     cfg.CreateMap<Emotion, EmotionViewModel>()
                         .ReverseMap();
                     cfg.CreateMap<User, UserViewModel>()
+                        .ReverseMap();
+                    cfg.CreateMap<User, UserNode>()
+                        .ReverseMap();
+                    cfg.CreateMap<UserViewModel, UserNode>()
                         .ReverseMap();
                 }).CreateMapper()
             );

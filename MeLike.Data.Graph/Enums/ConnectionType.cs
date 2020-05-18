@@ -2,10 +2,9 @@
 {
     public enum ConnectionType
     {
-        Friends,
-        YouFollows,
-        Follower,
-        Second,
-        Third,
+        YouFollows = 1,
+        Second = 2,
+        Third = 3,
+        Other = 0,
     }
 }
